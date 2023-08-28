@@ -33,7 +33,7 @@ export default {
       const localStorageData = JSON.parse(localStorage.getItem("articleList"));
 
       const articles = localStorageData.filter(
-        (element, index) => !(index == articleId)
+        (element, index) => !(element.id == articleId)
       );
 
       localStorage.setItem("articleList", JSON.stringify(articles));
