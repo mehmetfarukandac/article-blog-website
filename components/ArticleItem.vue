@@ -69,9 +69,6 @@ export default {
     },
   },
   components: { BFButton },
-  mounted() {
-    console.log("articlearticlearticle: ", this.article);
-  },
 };
 </script>
 

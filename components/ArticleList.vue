@@ -45,7 +45,6 @@ export default {
     if (localStorageData) {
       this.$store.commit("updateArticleList", JSON.parse(localStorageData));
     } else {
-      // Örnek verileri Vuex mağazasına ve local storage'a ekleyin
       this.$store.commit("updateArticleList", [
         {
           id: 0,
@@ -90,7 +89,3 @@ export default {
   },
 };
 </script>
-
-<style>
-/* Stil tanımlamaları burada */
-</style>

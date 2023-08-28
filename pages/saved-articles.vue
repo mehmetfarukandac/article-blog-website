@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import ArticleItem from "~/components/ArticleItem.vue"; // ArticleItem'ın bulunduğu yol
+import ArticleItem from "~/components/ArticleItem.vue";
 import lottie from "vue-lottie/src/lottie.vue";
 import Blog from "../layouts/blog.vue";
 import * as animationData from "../assets/lotties/no-value-lottie.json";

@@ -85,15 +85,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.btn-primary {
-  background-color: #3182ce;
-  border-color: #3182ce;
-}
-
-.btn-primary:hover {
-  background-color: #2a69ac;
-  border-color: #2a69ac;
-}
-</style>

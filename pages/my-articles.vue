@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import ArticleItem from "~/components/ArticleItem.vue"; // ArticleItem bileşeninize göre düzenleyin
+import ArticleItem from "~/components/ArticleItem.vue";
 import Blog from "../layouts/blog.vue";
 import lottie from "vue-lottie/src/lottie.vue";
 import { mapState } from "vuex";
@@ -53,10 +53,6 @@ export default {
     ...mapState(["myArticles"]),
     articleList() {
       const localStorageData = localStorage.getItem("articleList");
-      console.log(
-        "localStorageDatalocalStorageDatalocalStorageData: ",
-        JSON.parse(localStorageData)
-      );
       return JSON.parse(localStorageData) || [];
     },
   },
@@ -84,25 +80,6 @@ export default {
       if (localStorageData) {
         this.$store.commit("updateMyArticles", myArticleList);
       }
-
-      // const localStorageMyArticles = JSON.parse(
-      //   localStorage.getItem("myArticles")
-      // );
-      // const localStorageArticleList = JSON.parse(
-      //   localStorage.getItem("articleList")
-      // );
-      // let filteredArticleList = null;
-
-      // for (let index = 0; index < localStorageMyArticles.length; index++) {
-      //   const element = localStorageMyArticles[index];
-      //   filteredArticleList = localStorageArticleList.filter(
-      //     (event) => event.id == element
-      //   );
-      // }
-
-      // if (localStorageMyArticles) {
-      //   this.$store.commit("updateMyArticles", filteredArticleList);
-      // }
     },
     deleteArticle(articleId) {
       const localStorageData = JSON.parse(localStorage.getItem("myArticles"));

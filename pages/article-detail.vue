@@ -1,73 +1,23 @@
 <template>
   <div class="container p-6 mx-auto">
-    <div
-      v-if="showForm"
-      class="absolute z-50 w-5/6 p-6 mb-4 bg-white rounded-md shadow-2xl shadow-bf-night"
-    >
-      <form @submit.prevent="updateArticle">
-        <div class="mb-4">
-          <label
-            for="articleTitle"
-            class="block text-sm font-medium text-gray-700"
-            >Makale Başlığı</label
-          >
-          <input
-            type="text"
-            id="articleTitle"
-            v-model="updatedArticle.title"
-            class="w-full p-2 mt-1 border rounded-md"
-          />
-        </div>
-        <div class="mb-4">
-          <label
-            for="articleDescription"
-            class="block text-sm font-medium text-gray-700"
-            >Makale Açıklaması</label
-          >
-          <textarea
-            id="articleDescription"
-            v-model="updatedArticle.description"
-            class="w-full p-2 mt-1 border rounded-md"
-            rows="4"
-          ></textarea>
-        </div>
-        <div class="mb-4">
-          <label
-            for="articleDescription"
-            class="block text-sm font-medium text-gray-700"
-            >Makale Resmi</label
-          >
-          <input
-            type="text"
-            id="articleTitle"
-            v-model="updatedArticle.img_url"
-            placeholder="Lütfen url giriniz"
-            class="w-full p-2 mt-1 border rounded-md"
-          />
-        </div>
-        <button
-          type="submit"
-          class="px-3 py-2 font-semibold rounded-md text-bf-primary bg-bf-primary/40 hover:bg-bf-primary/80 hover:text-white"
-        >
-          Güncelle
-        </button>
-      </form>
-    </div>
+    <UpdateArticle
+      :showForm="showForm"
+      :updatedArticle="updatedArticle"
+      :updateArticle="updateArticle"
+    />
     <div class="flex items-center justify-between mb-4">
       <div class="flex justify-end w-full">
         <div class="flex gap-x-4">
-          <button
-            class="rounded-md px-2.5 py-1.5 text-sm font-semibold text-bf-primary shadow-bf-night bg-bf-primary/20 hover:bg-bf-primary/40"
-            @click="saveArticle"
-          >
-            Favorilere ekle
-          </button>
-          <button
-            class="rounded-md px-2.5 py-1.5 text-sm font-semibold text-bf-primary shadow-bf-night bg-bf-primary/20 hover:bg-bf-primary/40"
-            @click="toggleForm"
-          >
-            Makaleyi Güncelle
-          </button>
+          <BFButton
+            className="text-bf-primary  bg-bf-primary/20 hover:bg-bf-primary/40"
+            :onClickHandler="saveArticle"
+            title="Favorilere ekle"
+          />
+          <BFButton
+            className="text-bf-primary  bg-bf-primary/20 hover:bg-bf-primary/40"
+            :onClickHandler="toggleForm"
+            title=" Makaleyi Güncelle"
+          />
           <button
             class="rounded-md px-2.5 py-1.5 text-sm font-semibold text-bf-secondary shadow-bf-night bg-bf-secondary/20 hover:bg-bf-secondary/40"
             v-if="isArticleSaved"
@@ -94,24 +44,22 @@
         <div v-html="article.content" class="prose"></div>
       </div>
     </div>
-    <!-- Formu gösterme butonu ve form -->
   </div>
 </template>
 
 <script>
 import Blog from "../layouts/blog.vue";
 import Swal from "sweetalert2";
+import UpdateArticle from "../components/UpdateArticle.vue";
+import BFButton from "../components/BFButton.vue";
 
 export default {
   layout: "blog",
-  // page component definitions
-  components: { Blog },
+  components: { Blog, UpdateArticle, BFButton },
   async asyncData({ params }) {
     const articleId = params.id;
 
     const articleList = JSON.parse(localStorage.getItem("articleList"));
-    console.log("articleList: ", articleList);
-
     const article = articleList.find((element) => element.id == articleId);
 
     return { article };
@@ -133,13 +81,13 @@ export default {
       const savedArticles =
         JSON.parse(localStorage.getItem("savedArticles")) || [];
       const articleList = JSON.parse(localStorage.getItem("articleList")) || [];
-      const findedArtcileInList = articleList.find(
+      const findArtcileInList = articleList.find(
         (element) => element.id == this.$route.params.id
       );
-      const findedArtcileInSaved = savedArticles.find(
-        (element) => element.title == findedArtcileInList.title
+      const findArtcileInSaved = savedArticles.find(
+        (element) => element.title == findArtcileInList.title
       );
-      if (findedArtcileInSaved) {
+      if (findArtcileInSaved) {
         this.showRemoveButton = true;
       }
       return this.showRemoveButton;
@@ -149,16 +97,9 @@ export default {
     async saveArticle() {
       const savedArticlesL =
         JSON.parse(localStorage.getItem("savedArticles")) || [];
-      const articleList = JSON.parse(localStorage.getItem("articleList")) || [];
+      const checkedArticle = await this.checkArticle();
 
-      const findedArtcileInList = articleList.find(
-        (element) => element.id == this.$route.params.id
-      );
-      const findedArtcileInSaved = savedArticlesL.find(
-        (element) => element.title == findedArtcileInList.title
-      );
-
-      if (!findedArtcileInSaved) {
+      if (!checkedArticle) {
         savedArticlesL.push(this.$route.params.id);
         Swal.fire("Hariikaa!", "Makaleniz okuma listenize eklendi!", "success");
         localStorage.setItem("savedArticles", JSON.stringify(savedArticlesL));
@@ -167,6 +108,20 @@ export default {
         Swal.fire("Oppss!", "Makalenizi zaten eklemiştiniz!", "error");
       }
       this.showRemoveButton = true;
+    },
+    checkArticle() {
+      const savedArticlesL =
+        JSON.parse(localStorage.getItem("savedArticles")) || [];
+      const articleList = JSON.parse(localStorage.getItem("articleList")) || [];
+
+      const findArtcileInList = articleList.find(
+        (element) => element.id == this.$route.params.id
+      );
+      const findArtcileInSaved = savedArticlesL.find(
+        (element) => element == findArtcileInList.id
+      );
+
+      return findArtcileInSaved;
     },
     removeArticle() {
       const savedArticles =
@@ -228,8 +183,13 @@ export default {
   mounted() {
     const currentUrl = window.location.href;
     const articleId = currentUrl.charAt(currentUrl.length - 1);
-    console.log("currentUrl: ", articleId);
     this.articleId = articleId;
+
+    const checkedArticle = this.checkArticle();
+
+    if (checkedArticle) {
+      this.showRemoveButton = true;
+    }
   },
 };
 </script>

@@ -11,13 +11,13 @@ module.exports = {
     extend: {
       colors: {
         "bf": {
-          "white": "#fdfdfd",
           "primary": "#1837D5",
           "secondary": "#A4192D",
           "accent": "#FFFF00",
           "neutral": "#fdfdfd",
-          "soft-dark": "#374151",
+          "white": "#fdfdfd",
           "dark": "#1F2937",
+          "soft-dark": "#374151",
           "text": "#9C9885",
         }
       },

@@ -12,7 +12,6 @@ import Blog from "../layouts/blog.vue";
 
 export default {
   layout: "blog",
-  // page component definitions
   components: { Blog, ArticleList, CreateArticle },
   mounted() {
     if (!localStorage.getItem("savedArticles")) {
