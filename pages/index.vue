@@ -15,8 +15,12 @@ export default {
   // page component definitions
   components: { Blog, ArticleList, CreateArticle },
   mounted() {
-    localStorage.setItem("savedArticles", JSON.stringify([]));
-    localStorage.setItem("myArticles", JSON.stringify([]));
+    if (!localStorage.getItem("savedArticles")) {
+      localStorage.setItem("savedArticles", JSON.stringify([]));
+    }
+    if (!localStorage.getItem("myArticles")) {
+      localStorage.setItem("myArticles", JSON.stringify([]));
+    }
   },
 };
 </script>
